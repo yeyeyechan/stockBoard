@@ -1,18 +1,17 @@
 import List from "./List";
 import "./Table.css";
-const Table = () => {
+const Table = ({ talbleHeads, listData }) => {
   return (
     <table className="stock-table">
       <thead>
         <tr>
-          <th>순위</th>
-          <th>종목명</th>
-          <th>현재가</th>
-          <th>등락률</th>
+          {talbleHeads.map((ele) => (
+            <th>{ele}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        <List />
+        <List listData={listData} />
       </tbody>
     </table>
   );
