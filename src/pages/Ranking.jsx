@@ -24,7 +24,7 @@ const Ranking = () => {
     }),
     []
   );
-  const { fluctuationData } = useFlucutationRankingData(param);
+  const { fluctuationData, updateTime } = useFlucutationRankingData(param);
   const headerProps = { title: "📈 실시간 주식 랭킹" };
 
   const talbleHeads = ["순위", "종목명", "현재가", "등락률"];

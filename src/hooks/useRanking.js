@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import getFluctuation from "../api/ranking";
 
 const reducer = (state, action) => {
@@ -9,23 +9,38 @@ const reducer = (state, action) => {
 };
 export const useFlucutationRankingData = (param) => {
   const [fluctuationData, dispatch] = useReducer(reducer, []);
+  const [updateTime, updatedAt] = useState("");
+
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       try {
         const response = await getFluctuation(param);
+        if (isMounted) {
+          dispatch({
+            type: "UPDATE",
+            data: response.output,
+          });
+          let date = new Date();
 
-        dispatch({
-          type: "UPDATE",
-          data: response.output,
-        });
+          updatedAt(date.toLocaleDateString() + date.toLocaleTimeString());
+        }
       } catch (err) {
         console.log(err); // 에러 설정
       } finally {
         console.log(false); // 로딩 종료
       }
     };
-
     fetchData();
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 5000); // 5초마다 갱신
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, [param]);
-  return { fluctuationData };
+  return { fluctuationData, updateTime };
 };

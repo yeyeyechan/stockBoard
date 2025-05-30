@@ -9,7 +9,6 @@ const makeApiCall = async ({ url, param, callback, method, headers }) => {
       "Content-Type": "application/json",
     },
   };
-
   try {
     const response = await axios
       .request(config)
