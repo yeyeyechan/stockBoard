@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import Header from "../components/Header";
 import Table from "../components/Table";
-
+import "./Ranking.css";
 import { useFlucutationRankingData } from "../hooks/useRanking";
+import Refresh from "../components/refresh";
 
 const Ranking = () => {
   const param = useMemo(
@@ -24,34 +25,72 @@ const Ranking = () => {
     }),
     []
   );
-  const { fluctuationData, updateTime } = useFlucutationRankingData(param);
-  const headerProps = { title: "📈 실시간 주식 랭킹" };
+  const { fluctuationData, refetch } = useFlucutationRankingData(param);
+  const getApiData = () => {};
 
-  const talbleHeads = ["순위", "종목명", "현재가", "등락률"];
-  const listData = fluctuationData.map((ele) => (
-    <tr key={ele.data_rank}>
-      <td>{ele.data_rank}</td>
-      <td>{ele.hts_kor_isnm}</td>
-      <td>{ele.stck_prpr}원</td>
-      <td
-        className={
-          Number(ele.prdy_ctrt) > 0
-            ? "up"
-            : Number(ele.prdy_ctrt) < 0
-            ? "down"
-            : ""
-        }
-      >
-        {Number(ele.prdy_ctrt) > 0 ? "▲" : Number(ele.prdy_ctrt) < 0 ? "▼" : ""}
-        {ele.prdy_ctrt}%
-      </td>
-    </tr>
-  ));
-  console.log(listData);
+  const [list1, setList1] = useState([]);
+  const [list2, setList2] = useState([]);
+  const [list3, setList3] = useState([]);
+
+  const sampleData = [];
+
+  const onClick = () => {
+    const addedData = sampleData.push;
+    setList1(sampleData);
+    setList2(sampleData);
+    setList3(sampleData);
+  };
+
+  let listData = [];
+  const refresh = () => {
+    listData = getApiData(param);
+  };
+
+  refresh();
+  const title = "📈 실시간 주식 급등 종목";
+
+  const columns = [
+    { label: "순위", key: "rank" },
+    { label: "종목명", key: "name" },
+    { label: "현재가", key: "price" },
+    { label: "등락률", key: "change" },
+  ];
+  const renderItems = (item) => (
+    <>
+      <tr key={item.data_rank}>
+        <td>{item.data_rank}</td>
+        <td>{item.hts_kor_isnm}</td>
+        <td>{item.stck_prpr}원</td>
+        <td
+          className={
+            Number(item.prdy_ctrt) > 0
+              ? "up"
+              : Number(item.prdy_ctrt) < 0
+              ? "down"
+              : ""
+          }
+        >
+          {Number(item.prdy_ctrt) > 0
+            ? "▲"
+            : Number(item.prdy_ctrt) < 0
+            ? "▼"
+            : ""}
+          {item.prdy_ctrt}%
+        </td>
+      </tr>
+    </>
+  );
   return (
     <div>
-      <Header headerProps={headerProps} />
-      <Table talbleHeads={talbleHeads} listData={listData} />
+      <Header title={title} />
+      <div className="refresh-container">
+        <Refresh onRefresh={refetch} />
+      </div>
+      <Table
+        columns={columns}
+        listData={fluctuationData}
+        renderItems={renderItems}
+      />
     </div>
   );
 };

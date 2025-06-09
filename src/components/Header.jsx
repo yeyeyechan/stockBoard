@@ -1,6 +1,5 @@
 import "./Header.css";
-const Header = ({ headerProps }) => {
-  const { title } = { ...headerProps };
+const Header = ({ title }) => {
   return <h1>{title}</h1>;
 };
 

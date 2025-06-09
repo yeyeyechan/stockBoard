@@ -1,17 +1,18 @@
+import { useState } from "react";
 import List from "./List";
 import "./Table.css";
-const Table = ({ talbleHeads, listData }) => {
+const Table = ({ columns, listData, renderItems }) => {
   return (
     <table className="stock-table">
       <thead>
         <tr>
-          {talbleHeads.map((ele) => (
-            <th>{ele}</th>
+          {columns.map((ele) => (
+            <th key={ele.key}>{ele.label}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        <List listData={listData} />
+        <List listData={listData} renderItems={renderItems} />
       </tbody>
     </table>
   );
