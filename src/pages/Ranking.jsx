@@ -26,27 +26,7 @@ const Ranking = () => {
     []
   );
   const { fluctuationData, refetch } = useFlucutationRankingData(param);
-  const getApiData = () => {};
 
-  const [list1, setList1] = useState([]);
-  const [list2, setList2] = useState([]);
-  const [list3, setList3] = useState([]);
-
-  const sampleData = [];
-
-  const onClick = () => {
-    const addedData = sampleData.push;
-    setList1(sampleData);
-    setList2(sampleData);
-    setList3(sampleData);
-  };
-
-  let listData = [];
-  const refresh = () => {
-    listData = getApiData(param);
-  };
-
-  refresh();
   const title = "📈 실시간 주식 급등 종목";
 
   const columns = [
@@ -56,29 +36,27 @@ const Ranking = () => {
     { label: "등락률", key: "change" },
   ];
   const renderItems = (item) => (
-    <>
-      <tr key={item.data_rank}>
-        <td>{item.data_rank}</td>
-        <td>{item.hts_kor_isnm}</td>
-        <td>{item.stck_prpr}원</td>
-        <td
-          className={
-            Number(item.prdy_ctrt) > 0
-              ? "up"
-              : Number(item.prdy_ctrt) < 0
-              ? "down"
-              : ""
-          }
-        >
-          {Number(item.prdy_ctrt) > 0
-            ? "▲"
+    <tr key={item.data_rank}>
+      <td>{item.data_rank}</td>
+      <td>{item.hts_kor_isnm}</td>
+      <td>{item.stck_prpr}원</td>
+      <td
+        className={
+          Number(item.prdy_ctrt) > 0
+            ? "up"
             : Number(item.prdy_ctrt) < 0
-            ? "▼"
-            : ""}
-          {item.prdy_ctrt}%
-        </td>
-      </tr>
-    </>
+            ? "down"
+            : ""
+        }
+      >
+        {Number(item.prdy_ctrt) > 0
+          ? "▲"
+          : Number(item.prdy_ctrt) < 0
+          ? "▼"
+          : ""}
+        {item.prdy_ctrt}%
+      </td>
+    </tr>
   );
   return (
     <div>
